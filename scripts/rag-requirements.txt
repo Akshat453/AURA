@@ -1,0 +1,6 @@
+# Local RAG sidecar (scripts/rag_sidecar.py). Installed into runtime/rag-venv by setup-local.sh.
+# PyMuPDF is AGPL-3.0: fine for local/private use; review before redistributing.
+pymupdf==1.28.2
+onnxruntime==1.31.0
+tokenizers==0.23.3
+numpy==2.4.6

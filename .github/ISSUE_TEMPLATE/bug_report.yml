@@ -1,0 +1,38 @@
+name: Bug / defect
+description: Something in the increment does not work as the story promised
+title: "Bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what was expected?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start with ./scripts/start-local.sh
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Release tag (e.g. v1.0.0) or commit SHA from the CI run.
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options: [Critical — blocks the demo, Major, Minor]
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Server log lines or browser console output (never paste API keys).
+      render: text

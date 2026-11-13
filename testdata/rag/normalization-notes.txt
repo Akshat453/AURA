@@ -1,0 +1,9 @@
+Lecture notes: Why we normalize tables
+
+A badly designed table repeats the same facts in many rows. When a student's department name is stored in every enrolment row, changing the department name means updating many rows; missing one leaves the data inconsistent. These problems are called update anomalies, insertion anomalies and deletion anomalies.
+
+Normalization splits such a table into smaller tables so that each fact is stored once. First normal form requires atomic values and no repeating groups. Second normal form removes partial dependencies on part of a composite key. Third normal form removes transitive dependencies, where a non-key attribute depends on another non-key attribute.
+
+Example: the table Enrolment(StudentID, CourseID, StudentName, DeptName) is split into Student(StudentID, StudentName, DeptName) and Enrolment(StudentID, CourseID). Now the department name is stored once per student.
+
+Exam tip: always state the functional dependencies before decomposing a relation.

@@ -1,0 +1,76 @@
+# Security dependency update.
+#
+# Applies `npm audit fix` to the backend's dependencies (or upgrades the
+# packages given as input), checks that lint and the full test suite still
+# pass and that `npm audit` is clean, and opens a pull request with the new
+# package.json / package-lock.json. The normal CI suite is then started on
+# that branch, so the pull request gets the usual checks.
+#
+# Run it from the Actions tab: "Security dependency update" -> "Run workflow".
+# One-time setting needed for the pull request step:
+#   Settings -> Actions -> General -> Workflow permissions ->
+#   tick "Allow GitHub Actions to create and approve pull requests".
+name: Security dependency update
+
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Packages to upgrade (space separated, name@version); empty = npm audit fix"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  update:
+    name: Upgrade vulnerable packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BRANCH: deps/security-update-${{ github.run_number }}
+      PACKAGES: ${{ inputs.packages }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Upgrade
+        working-directory: backend
+        run: |
+          npm ci
+          if [ -n "$PACKAGES" ]; then read -r -a pkgs <<< "$PACKAGES"; npm install "${pkgs[@]}"; else npm audit fix; fi
+          git diff --stat package.json package-lock.json
+      - name: Lint and test
+        working-directory: backend
+        run: npm run lint && npm test
+      - name: npm audit must now be clean
+        working-directory: backend
+        run: npm audit --omit=dev
+      - name: Commit, push and open a pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet backend/package.json backend/package-lock.json; then
+            echo "Nothing to update."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add backend/package.json backend/package-lock.json
+          git commit -m "Upgrade vulnerable npm packages${PACKAGES:+: $PACKAGES}"
+          git push origin "$BRANCH"
+          body="Upgrades vulnerable backend dependencies${PACKAGES:+: \`$PACKAGES\`}.
+
+          This workflow already checked that lint and the full test suite pass and that npm audit is clean.
+          The CI workflow has been started on this branch; merge when it is green."
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$BRANCH" \
+             --title "Security: upgrade vulnerable npm packages" --body "$body" --label dependencies || \
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$BRANCH" \
+             --title "Security: upgrade vulnerable npm packages" --body "$body" || \
+            echo "::warning::Could not open the pull request automatically; open it by hand from $BRANCH."
+          gh workflow run ci.yml --ref "$BRANCH"

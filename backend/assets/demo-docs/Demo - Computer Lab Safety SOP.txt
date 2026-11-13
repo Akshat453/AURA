@@ -1,0 +1,9 @@
+Computer Lab Safety and Usage SOP (demo document)
+
+1. Students must sign the lab register on entry and exit.
+2. Food and drinks are not allowed near the workstations.
+3. Report damaged equipment to the lab assistant immediately; do not open cabinets or network racks.
+4. Save work on the shared drive; local disks are cleaned every Friday.
+5. Switch off monitors at the end of the session. The last batch switches off the air conditioning.
+6. In case of fire, use the exit near Lab-3 and assemble at the parking area behind Block E.
+7. Lab timings: Monday to Friday 09:00–17:00. Extra sessions need written approval from the course instructor.

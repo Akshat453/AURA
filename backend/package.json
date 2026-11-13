@@ -1,0 +1,52 @@
+{
+  "name": "aura-backend",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AURA professor voice assistant backend (Node.js + Express): web UI, REST API, browser WebSocket and the ESP32 VAP1 device gateway.",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "professor-assistant": "src/server.js",
+    "devicectl": "bin/devicectl.js",
+    "device-sim": "bin/device-sim.js",
+    "config-check": "bin/config-check.js",
+    "aura-db": "bin/db.js",
+    "e2e-check": "bin/e2e-check.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "lint": "eslint .",
+    "test": "node --test --test-concurrency=4 --test-timeout=120000 \"tests/**/*.test.js\" \"tests/**/*.test.mjs\"",
+    "test:unit": "node --test \"tests/unit/**/*.test.js\"",
+    "test:protocol": "node --test \"tests/protocol/**/*.test.js\"",
+    "test:security": "node --test \"tests/security/**/*.test.js\"",
+    "test:integration": "node --test --test-timeout=120000 \"tests/integration/**/*.test.js\"",
+    "test:frontend": "node --test \"tests/frontend/**/*.test.mjs\"",
+    "test:e2e": "node --test --test-timeout=300000 \"tests/e2e/**/*.test.js\"",
+    "check": "node bin/config-check.js"
+  },
+  "dependencies": {
+    "@google/genai": "^3.3.0",
+    "@peculiar/x509": "^3.1.0",
+    "better-sqlite3": "^13.1.1",
+    "busboy": "^1.6.0",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "fflate": "^0.8.3",
+    "luxon": "^3.7.2",
+    "pino": "^10.4.0",
+    "reflect-metadata": "^0.2.2",
+    "saxes": "^6.0.0",
+    "undici": "^8.12.4",
+    "ws": "^8.23.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0"
+  }
+}

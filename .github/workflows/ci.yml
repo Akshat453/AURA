@@ -1,0 +1,225 @@
+# Continuous Integration — runs on every push to a working branch and on every
+# pull request into main/develop. A pull request may be merged only when all
+# required jobs here are green (see docs/CI_CD.md, "Branch protection").
+#
+# Pushes to main and version tags do not trigger this file directly: the CD
+# workflow (cd.yml) calls it first, so the same checks gate every release.
+name: CI
+
+on:
+  push:
+    branches-ignore: [main]
+    tags-ignore: ["**"]
+    paths-ignore: ["**.md", "docs/**", "LICENSE"]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  # Superseded runs on working branches are cancelled; runs for main and
+  # release tags (called from cd.yml) always finish.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  NODE_VERSION: "24" # current LTS line used for builds and images
+  PYTHON_VERSION: "3.10" # the version scripts/setup-local.sh targets
+
+jobs:
+  lint:
+    name: Lint (ESLint · lockfile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install (clean, from the lockfile)
+        run: npm ci --prefix backend
+      - name: ESLint
+        run: npm run --prefix backend lint
+      - name: Syntax check of every backend file
+        run: for f in $(git ls-files 'backend/*.js' 'backend/*.mjs'); do node --check "$f"; done
+
+  test:
+    name: Node tests (${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["24", "26"]
+    env:
+      # The listener tests use in-process fakes (Whisper, Piper, Gemini,
+      # Tavily, Google), never real services or paid APIs.
+      TZ: Asia/Kolkata # same zone the team develops and demos in
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci --prefix backend
+      - name: Unit, protocol, security, integration and frontend tests
+        run: |
+          set -o pipefail
+          cd backend
+          node --test --test-concurrency=4 --test-timeout=120000 --test-reporter=spec --test-reporter-destination=stdout \
+            --test-reporter=junit --test-reporter-destination=junit.xml "tests/**/*.test.js" "tests/**/*.test.mjs" | tee test-output.txt
+      - name: Test summary
+        if: always()
+        run: |
+          {
+            echo "### Node ${{ matrix.node }} tests"
+            echo ""
+            grep -E '^ℹ (tests|pass|fail|skipped|duration_ms)' backend/test-output.txt || true
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: node-test-report-${{ matrix.node }}
+          path: |
+            backend/junit.xml
+            backend/test-output.txt
+          retention-days: 14
+          if-no-files-found: ignore
+
+  scripts:
+    name: Scripts (Python · shell)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Python syntax check
+        run: python -m py_compile scripts/*.py pc_usb_audio_bridge.py
+      - name: Shell syntax check
+        run: for f in scripts/*.sh scripts/ci/*.sh; do bash -n "$f"; done
+      - name: ShellCheck (errors only)
+        run: shellcheck --severity=error scripts/*.sh scripts/ci/*.sh
+
+  security:
+    name: Vulnerability scan (npm audit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Reported on every run but not blocking: a new advisory in a dependency
+    # should become a backlog item, not stop unrelated work.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci --prefix backend
+      - name: npm audit (production dependencies)
+        run: npm audit --prefix backend --omit=dev
+
+  build:
+    name: Package
+    needs: [lint, test, scripts]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Package the backend (sources, lockfile, scripts, docs)
+        run: |
+          name="professor-voice-assistant"
+          out="dist/${name}"
+          mkdir -p "$out"
+          cp -r backend "$out/backend"
+          rm -rf "$out/backend/node_modules" "$out/backend/tests"
+          cp README.md .env.example "$out/"
+          cp -r docs scripts "$out/"
+          cd dist && tar -czf "${name}.tar.gz" "${name}" && ls -la
+      - uses: actions/upload-artifact@v7
+        with:
+          name: build-package
+          path: dist/*.tar.gz
+          retention-days: 14
+          if-no-files-found: error
+
+  smoke:
+    name: Smoke test (clean install, start, /healthz, web UI)
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: build-package
+          path: dist
+      - name: Unpack and install from the lockfile only
+        run: |
+          tar -xzf dist/professor-voice-assistant.tar.gz -C dist
+          npm ci --omit=dev --prefix dist/professor-voice-assistant/backend
+      - name: Run smoke test
+        run: bash scripts/ci/smoke-test.sh dist/professor-voice-assistant/backend/src/server.js
+
+  docker:
+    name: Docker image (build + smoke test)
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          push: false
+          tags: professor-voice-assistant:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Smoke test the container
+        run: bash scripts/ci/smoke-test.sh --docker professor-voice-assistant:ci
+
+  firmware:
+    name: Firmware build (ESP-IDF 5.3, esp32s3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: idf.py build (placeholder secrets and CA)
+        uses: espressif/esp-idf-ci-action@v1.2.0
+        with:
+          esp_idf_version: release-v5.3
+          target: esp32s3
+          path: firmware/aura_single_usb
+          command: idf.py build
+      - name: Package flashable images
+        run: |
+          cd firmware/aura_single_usb/build
+          mkdir -p ../../../dist/aura-esp32s3
+          sudo cp bootloader/bootloader.bin partition_table/partition-table.bin aura_single_usb.bin \
+                  flash_args ../../../dist/aura-esp32s3/
+          [ -f srmodels/srmodels.bin ] && sudo cp srmodels/srmodels.bin ../../../dist/aura-esp32s3/
+          cd ../../../dist && sudo tar -czf aura-esp32s3-firmware.tar.gz aura-esp32s3
+          ls -la
+          {
+            echo "### Firmware"
+            echo ""
+            echo "Built with placeholder Wi-Fi, secret and CA. For a real board build locally with your"
+            echo "main/secrets.h and main/certs/ca.crt (docs/HARDWARE_SETUP.md)."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: firmware-esp32s3
+          path: dist/aura-esp32s3-firmware.tar.gz
+          retention-days: 14

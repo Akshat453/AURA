@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Professor Assistant</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f6e66'/%3E%3Cpath d='M16 6c.8 5.4 3 7.7 8.4 8.4-5.4.8-7.6 3-8.4 8.4-.8-5.4-3-7.6-8.4-8.4C13 13.7 15.2 11.4 16 6Z' fill='%23fff'/%3E%3C/svg%3E">
+<script>try { const t = localStorage.getItem('pa-theme') || 'light'; document.documentElement.dataset.theme = t === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : t } catch {}</script>
+<link rel="stylesheet" href="/web/style.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.7A8 8 0 1 1 21 12Z"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6Z"/><path d="M14.5 3v4.5H19M9 12h7M9 16h5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4 15v4a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M4 15v4a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15H9"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19Z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 8v.01"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.2 2.3 6 6.5 6.5-4.2.6-5.9 2.3-6.5 6.5-.6-4.2-2.3-5.9-6.5-6.5C9.7 9 11.4 7.2 12 3Z"/><path d="M18.5 15.5c.3 1.9 1 2.6 3 3-2 .3-2.7 1-3 3-.3-2-1-2.7-3-3 2-.4 2.7-1.1 3-3Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.3L4 8.5M4 4v4.5h4.5M4 13a8 8 0 0 0 14.3 4.3L20 15.5M20 20v-4.5h-4.5"/></symbol>
+  <symbol id="i-chevron-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+  <symbol id="i-chevron-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8.5L19 7.5V21H6Z"/><path d="M14 3v5h5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5Z"/></symbol>
+</svg>
+
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand"><div class="brand-mark"><svg class="icon"><use href="#i-spark"/></svg></div><div><strong>Professor Assistant</strong><small>Local voice assistant</small></div></div>
+    <nav>
+      <div class="nav-group">
+        <a class="nav-item" href="#/dashboard" data-view="dashboard"><svg class="icon"><use href="#i-home"/></svg>Dashboard</a>
+        <a class="nav-item" href="#/assistant" data-view="assistant"><svg class="icon"><use href="#i-chat"/></svg>AI Assistant</a>
+      </div>
+      <div class="nav-group" data-group="teaching">
+        <div class="nav-label">Teaching</div>
+        <a class="nav-item" href="#/timetable" data-view="timetable" data-feature="timetable"><svg class="icon"><use href="#i-calendar"/></svg>Timetable</a>
+        <a class="nav-item" href="#/reminders" data-view="reminders" data-feature="reminders"><svg class="icon"><use href="#i-bell"/></svg>Reminders<span class="count" id="navOverdue" hidden></span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Knowledge</div>
+        <a class="nav-item" href="#/notes" data-view="notes" data-feature="notes"><svg class="icon"><use href="#i-note"/></svg>Notes</a>
+        <a class="nav-item" href="#/memos" data-view="memos" data-feature="voice_memos"><svg class="icon"><use href="#i-mic"/></svg>Voice Memos</a>
+        <a class="nav-item" href="#/documents" data-view="documents"><svg class="icon"><use href="#i-book"/></svg>Documents</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">Writing</div>
+        <a class="nav-item" href="#/drafts" data-view="drafts" data-feature="email_drafts"><svg class="icon"><use href="#i-mail"/></svg>Email Drafts</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-label">System</div>
+        <a class="nav-item" href="#/accounts" data-view="accounts"><svg class="icon"><use href="#i-link"/></svg>Connected Accounts</a>
+        <a class="nav-item" href="#/settings" data-view="settings"><svg class="icon"><use href="#i-settings"/></svg>Settings</a>
+      </div>
+    </nav>
+    <div class="sidebar-foot" id="sidebarFoot">Everything runs on this Mac.</div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn ghost icon-only menu-button" id="menuButton" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"><svg class="icon"><use href="#i-menu"/></svg></button>
+      <h1 id="viewTitle">Dashboard</h1>
+      <div class="actions" id="viewActions"></div>
+      <span class="status" id="connection" role="status"><span class="dot"></span><span class="label">Connecting…</span></span>
+    </header>
+
+    <div class="banner" id="reminderBanner" role="alert" hidden>
+      <svg class="icon"><use href="#i-bell"/></svg>
+      <div class="grow" style="flex:1"><strong>Reminder</strong><ul id="dueList"></ul></div>
+      <button class="btn sm" id="dismissDue" type="button">Dismiss</button>
+    </div>
+
+    <main class="content" id="content" tabindex="-1">
+      <!-- Dashboard -->
+      <section data-view="dashboard" aria-labelledby="viewTitle">
+        <div class="hello"><h2 id="dashGreeting">Welcome</h2><p id="dashDate"></p></div>
+        <div class="quick" id="dashQuick">
+          <a class="btn" href="#/assistant" data-focus="textInput"><svg class="icon"><use href="#i-chat"/></svg>Ask Assistant</a>
+          <a class="btn" href="#/reminders" data-open="reminder" data-feature="reminders"><svg class="icon"><use href="#i-bell"/></svg>Add Reminder</a>
+          <a class="btn" href="#/notes" data-open="note" data-feature="notes"><svg class="icon"><use href="#i-note"/></svg>Add Note</a>
+          <a class="btn" href="#/timetable" data-feature="timetable"><svg class="icon"><use href="#i-calendar"/></svg>Timetable</a>
+          <a class="btn" href="#/drafts" data-open="draft" data-feature="email_drafts"><svg class="icon"><use href="#i-mail"/></svg>Draft Email</a>
+        </div>
+        <div class="grid grid-3">
+          <div class="card span-2" data-feature="timetable"><div class="card-head"><h2>Today's teaching</h2><a href="#/timetable">Timetable</a></div><div id="dashToday" class="loading">Loading…</div></div>
+          <div class="card" data-feature="timetable"><div class="card-head"><h2>Next lecture</h2></div><div id="dashNext" class="loading">Loading…</div></div>
+          <div class="card span-2" data-feature="reminders"><div class="card-head"><h2>Upcoming reminders</h2><a href="#/reminders">All reminders</a></div><div id="dashReminders" class="loading">Loading…</div></div>
+          <div class="card" data-feature="notes"><div class="card-head"><h2>Recent notes</h2><a href="#/notes">Notes</a></div><div id="dashNotes" class="loading">Loading…</div></div>
+        </div>
+      </section>
+
+      <!-- Assistant -->
+      <section data-view="assistant" hidden>
+        <div class="assistant-screen">
+          <div class="thread" id="thread" aria-live="polite" aria-label="Conversation">
+            <div class="thread-inner" id="threadInner">
+              <div class="welcome" id="welcome">
+                <div class="brand-mark"><svg class="icon"><use href="#i-spark"/></svg></div>
+                <h2>How can I help today?</h2>
+                <p>Hold the microphone and speak in English, Hindi or Hinglish, or type below. Changes to your reminders, notes and drafts always ask you first.</p>
+                <div class="suggestions" id="suggestions">
+                  <button type="button">What is my next lecture?</button>
+                  <button type="button">Show today's reminders</button>
+                  <button type="button">Remind me to submit attendance tomorrow at 10 AM</button>
+                  <button type="button">Aaj meri kitni classes hain?</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <div class="composer-inner">
+              <div class="state-line" id="chatState" data-state="idle" role="status" aria-live="polite"><span class="pulse"></span><span id="chatStateText">Connecting…</span><span class="spacer"></span><span class="level" id="levelTrack" hidden><span id="levelBar"></span></span></div>
+              <form class="input-row" id="textForm">
+                <button class="mic" id="talk" type="button" disabled aria-label="Hold to speak" title="Hold to speak (or hold Space)"><svg class="icon"><use href="#i-mic"/></svg></button>
+                <label for="textInput" class="sr-only">Message</label>
+                <textarea id="textInput" rows="1" maxlength="2000" placeholder="Type a message…" autocomplete="off"></textarea>
+                <button class="btn primary icon-only send" id="send" type="submit" aria-label="Send"><svg class="icon"><use href="#i-send"/></svg></button>
+                <button class="btn danger icon-only send" id="stop" type="button" aria-label="Stop the reply" hidden><svg class="icon"><use href="#i-stop"/></svg></button>
+              </form>
+              <div class="composer-tools">
+                <label class="row" style="gap:6px"><span class="tool-label">Language</span> <select id="language" aria-label="Language"><option value="auto">Auto detect</option><option value="en">English</option><option value="hi">हिन्दी</option><option value="hinglish">Hinglish</option></select></label>
+                <label class="row" style="gap:6px"><span class="tool-label">Answer from</span> <select id="mode" aria-label="Answer from"><option value="auto">Auto</option><option value="general">General knowledge</option><option value="documents">My documents</option><option value="web">Web search</option></select></label>
+                <button type="button" class="switch" role="switch" aria-checked="false" data-doc-share aria-label="Let Gemini read my documents"><span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span><span class="switch-state" aria-hidden="true">Off</span><span class="tool-label">Let Gemini read my documents</span><span class="short-label">Docs to Gemini</span></button>
+                <span class="spacer"></span>
+                <a href="#/settings" id="privacySummary" class="hide-sm"><svg class="icon" style="width:14px;height:14px;vertical-align:-2px"><use href="#i-lock"/></svg> <span>Privacy</span></a>
+                <button class="btn ghost sm" id="clear" type="button">New conversation</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timetable -->
+      <section data-view="timetable" hidden>
+        <div class="view-head"><div class="segmented" role="group" aria-label="Timetable view"><button type="button" data-tt="today" aria-pressed="true">Day</button><button type="button" data-tt="week" aria-pressed="false">Week</button></div><p class="muted small" id="ttZone"></p></div>
+        <div id="ttDayPanel">
+          <div class="card">
+            <div class="card-head"><div class="row"><button class="btn sm icon-only" id="dayPrev" type="button" aria-label="Previous day"><svg class="icon"><use href="#i-chevron-l"/></svg></button><h2 id="dayTitle">Today</h2><button class="btn sm icon-only" id="dayNext" type="button" aria-label="Next day"><svg class="icon"><use href="#i-chevron-r"/></svg></button><button class="btn sm ghost" id="dayToday" type="button">Today</button></div><label class="sr-only" for="dayDate">Date</label><input type="date" id="dayDate" style="width:auto"></div>
+            <ul class="list today-list" id="dayList"></ul>
+            <p class="small muted" id="dayFree" style="margin-top:8px"></p>
+          </div>
+        </div>
+        <div id="ttWeekPanel" hidden><div class="week" id="weekGrid"></div><p class="small muted" style="margin-top:12px">Weekly pattern. Holidays and one-off cancellations are not recorded. Select a class to edit it.</p></div>
+        <input type="file" id="ttImport" accept=".csv,text/csv" hidden>
+      </section>
+
+      <!-- Reminders -->
+      <section data-view="reminders" hidden>
+        <div class="view-head"><div class="segmented" role="group" aria-label="Filter reminders" id="remScope"><button type="button" data-scope="upcoming" aria-pressed="true">Upcoming</button><button type="button" data-scope="today" aria-pressed="false">Today</button><button type="button" data-scope="overdue" aria-pressed="false">Overdue</button><button type="button" data-scope="completed" aria-pressed="false">Completed</button><button type="button" data-scope="all" aria-pressed="false">All</button></div></div>
+        <div class="card"><ul class="list" id="remList"><li class="loading">Loading…</li></ul></div>
+        <p class="notice" style="margin-top:14px"><svg class="icon"><use href="#i-info"/></svg><span>Reminders appear here and as a banner while the assistant is running (and as macOS notifications if enabled). They cannot fire while the Mac is off or asleep; ones missed meanwhile are shown as overdue at the next start.</span></p>
+      </section>
+
+      <!-- Notes -->
+      <section data-view="notes" hidden>
+        <div class="workspace">
+          <div class="pane">
+            <div class="pane-head">
+              <form id="noteSearch" class="row" role="search"><div class="search-input"><svg class="icon"><use href="#i-search"/></svg><label class="sr-only" for="noteQuery">Search notes and memos</label><input id="noteQuery" type="search" placeholder="Search notes and memos (English or Hindi)" maxlength="500"></div></form>
+              <div class="row"><label class="sr-only" for="noteTag">Tag</label><input id="noteTag" placeholder="Filter by tag" maxlength="30" style="flex:1"><button class="btn sm ghost" id="noteRecent" type="button">Recent</button></div>
+              <p class="small muted" id="noteState" aria-live="polite"></p>
+            </div>
+            <ul class="pane-list" id="noteList"></ul>
+          </div>
+          <div class="pane" id="noteEditor"></div>
+        </div>
+      </section>
+
+      <!-- Voice memos -->
+      <section data-view="memos" hidden>
+        <div class="card">
+          <div class="recorder">
+            <button class="record-btn" id="memoRecord" type="button" aria-label="Start recording"><svg class="icon"><use href="#i-mic"/></svg></button>
+            <div class="rec-status" aria-live="polite"><strong id="memoTimer">Ready to record</strong><span class="muted small" id="memoState">Recording starts only when you press the button. Audio is transcribed on this Mac by Whisper.</span></div>
+            <span class="spacer"></span>
+            <div class="stack" style="min-width:220px">
+              <label class="field">Language<select id="memoLang"><option value="auto">Auto detect</option><option value="en">English</option><option value="hi">हिन्दी</option><option value="hinglish">Hinglish</option></select></label>
+              <label class="check"><input id="memoKeep" type="checkbox"><span>Keep the original audio<br><span class="hint">Otherwise it is discarded after transcription.</span></span></label>
+            </div>
+          </div>
+          <form id="memoForm" class="stack" hidden style="margin-top:18px;border-top:1px solid var(--border);padding-top:16px">
+            <div class="row"><h2>Review before saving</h2><span class="spacer"></span><audio id="memoPreview" controls preload="metadata"></audio></div>
+            <label class="field">Title<input id="mTitle" maxlength="200" placeholder="Optional — taken from the transcript if empty"></label>
+            <label class="field">Transcript<textarea id="mTranscript" rows="5" maxlength="20000" required></textarea><span class="hint" id="memoInfo"></span></label>
+            <div class="row end"><button class="btn ghost" id="memoDiscard" type="button">Discard</button><button class="btn primary" type="submit"><svg class="icon"><use href="#i-check"/></svg>Save memo</button></div>
+          </form>
+        </div>
+        <div class="card"><div class="card-head"><h2>Saved memos</h2><span class="small muted" id="memoListState"></span></div><ul class="list" id="memoList"></ul></div>
+      </section>
+
+      <!-- Documents -->
+      <section data-view="documents" hidden>
+        <div class="grid">
+          <div class="card doc-share" id="docShareCard">
+            <div class="switch-row"><div><h2 id="docShareTitle">Let Gemini read my documents</h2><p class="small" id="docShareStatus" aria-live="polite"></p></div>
+              <button type="button" class="switch" role="switch" aria-checked="false" data-doc-share aria-labelledby="docShareTitle" aria-describedby="docShareStatus"><span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span><span class="switch-state" aria-hidden="true">Off</span></button></div>
+            <div class="switch-row" id="deviceDocsRow" hidden><div><strong id="deviceDocsTitle">Desk device (ESP32)</strong><p class="small muted" id="deviceDocsStatus" aria-live="polite"></p></div>
+              <button type="button" class="switch" role="switch" aria-checked="false" id="deviceDocsSwitch" aria-labelledby="deviceDocsTitle" aria-describedby="deviceDocsStatus"><span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span><span class="switch-state" aria-hidden="true">Off</span></button></div>
+          </div>
+          <label class="dropzone" id="dropzone"><input id="docUpload" type="file" accept=".pdf,.txt,.md,.markdown,.docx,.pptx" multiple hidden>
+            <svg class="icon"><use href="#i-upload"/></svg><div><strong>Upload documents</strong></div><div class="small">Drop files here or click — PDF, TXT, Markdown, DOCX or PPTX. Files and their index stay on this Mac.</div></label>
+          <p class="small muted" id="docState" aria-live="polite">Loading documents…</p>
+          <div class="card"><div class="card-head"><h2>Indexed documents</h2><span class="small muted" id="docCount"></span></div>
+            <div class="table-wrap"><table class="data"><thead><tr><th>Name</th><th class="hide-sm">Type</th><th class="hide-sm">Size</th><th class="hide-sm">Chunks</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="docList"></tbody></table></div>
+            <div class="empty" id="docEmpty" hidden><svg class="icon"><use href="#i-book"/></svg><strong>No documents yet</strong>Upload a syllabus, notes or a paper to ask questions about it.</div>
+          </div>
+          <div class="card"><div class="card-head"><h2>Test a search</h2><span class="small muted">Runs locally; nothing is sent to Gemini</span></div>
+            <form id="docSearchForm" class="row" role="search"><div class="search-input"><svg class="icon"><use href="#i-search"/></svg><label class="sr-only" for="docSearchInput">Search documents</label><input id="docSearchInput" type="search" maxlength="1000" placeholder="Ask in English or Hindi"></div><button class="btn">Search</button></form>
+            <div id="docSearchResults" style="margin-top:12px"></div>
+          </div>
+          <p class="notice"><svg class="icon"><use href="#i-info"/></svg><span><strong>Documents and notes are separate.</strong> Uploaded files are listed here. Your notes and voice memos are searchable too, but are managed in their own sections and follow the note privacy setting.</span></p>
+        </div>
+      </section>
+
+      <!-- Drafts -->
+      <section data-view="drafts" hidden>
+        <p class="notice" style="margin-bottom:14px"><svg class="icon"><use href="#i-mail"/></svg><span>Drafts are saved on this Mac. <strong>This program never sends email.</strong> “Open in Gmail”, “Open in Outlook” and “Mail app” only open a pre-filled message in your own mail client — review it and press Send there yourself. You can also copy a draft, or create a Gmail draft if your Google account is connected.</span></p>
+        <div class="workspace">
+          <div class="pane">
+            <div class="pane-head"><div class="segmented" role="group" aria-label="Draft type" id="draftKind"><button type="button" data-kind="" aria-pressed="true">All</button><button type="button" data-kind="email" aria-pressed="false">Emails</button><button type="button" data-kind="announcement" aria-pressed="false">Announcements</button></div></div>
+            <ul class="pane-list" id="draftList"></ul>
+          </div>
+          <div class="pane" id="draftEditor"></div>
+        </div>
+      </section>
+
+      <!-- Accounts -->
+      <section data-view="accounts" hidden>
+        <div class="card" id="googleCard"><div class="card-head"><div class="row"><svg class="icon"><use href="#i-globe"/></svg><h2>Google account</h2></div><span class="status" id="googleStatus"><span class="dot"></span><span class="label">Checking…</span></span></div>
+          <p class="muted" id="googleState"></p>
+          <div class="row" style="margin-top:12px"><a class="btn primary" id="googleConnect" href="/api/google/connect" target="_blank" rel="noopener" hidden>Connect Google account</a><button class="btn" id="googleDisconnect" type="button" hidden>Disconnect</button></div>
+          <ul class="list" id="googleEvents" style="margin-top:12px"></ul>
+          <hr class="divider"><p class="small muted">Calendar access is read-only. Gmail access only creates drafts after you choose “Create Gmail draft”; nothing is ever sent. The local timetable does not depend on Google.</p>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section data-view="settings" hidden>
+        <div class="card">
+          <div class="settings-section"><div><h2>Appearance</h2><p>Light is the default.</p></div>
+            <div class="segmented" role="group" aria-label="Theme" id="themeChoice"><button type="button" data-theme-choice="light" aria-pressed="true"><svg class="icon" style="width:14px;height:14px;vertical-align:-2px"><use href="#i-sun"/></svg> Light</button><button type="button" data-theme-choice="dark" aria-pressed="false"><svg class="icon" style="width:14px;height:14px;vertical-align:-2px"><use href="#i-moon"/></svg> Dark</button><button type="button" data-theme-choice="system" aria-pressed="false">System</button></div></div>
+          <div class="settings-section"><div><h2>Voice</h2><p>Speech is transcribed on this Mac by Whisper and spoken by Piper.</p></div>
+            <div class="stack">
+              <label class="field">Microphone<select id="microphone"><option value="">System default</option></select><span class="hint" id="micPermission"></span></label>
+              <div class="row"><button class="btn sm" id="micTest" type="button"><svg class="icon"><use href="#i-mic"/></svg>Allow and list microphones</button></div>
+              <label class="check"><input type="checkbox" id="speakReplies" checked><span>Read replies aloud<br><span class="hint">Turn off to read answers silently. Replies are still generated the same way.</span></span></label>
+              <label class="field">Reply volume <input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-describedby="volumeValue"><span class="hint" id="volumeValue">100%</span></label>
+            </div></div>
+          <div class="settings-section"><div><h2>Privacy</h2><p>What may leave this Mac. These choices apply to this browser; “Let Gemini read my documents” applies to this tab only and starts off in every new tab.</p></div>
+            <div class="stack">
+              <label class="check"><input id="docConsent" type="checkbox"><span>Let Gemini read my documents<br><span class="hint" id="consentNote"></span></span></label>
+              <label class="check"><input id="noteConsent" type="checkbox"><span>Allow sending my matching notes and voice-memo text to Gemini<br><span class="hint" id="noteConsentNote"></span></span></label>
+              <p class="notice"><svg class="icon"><use href="#i-lock"/></svg><span>Gemini always receives your question and, when needed to answer, timetable and reminder details. Note text and document passages are sent only with the permissions above. Web search queries go to Tavily. API keys and device secrets are never shown here.</span></p>
+              <p class="small muted" id="webState"></p>
+            </div></div>
+          <div class="settings-section"><div><h2>Connection and health</h2><p>Local services used by the assistant.</p></div>
+            <div class="stack"><ul class="list health" id="health"><li class="loading">Checking…</li></ul><div class="row"><button class="btn sm" id="healthRefresh" type="button"><svg class="icon"><use href="#i-refresh"/></svg>Check again</button></div><p class="small muted" id="aboutLine"></p></div></div>
+          <div class="settings-section"><div><h2>Diagnostics</h2><p>For troubleshooting. Not needed for normal use.</p></div>
+            <div class="stack">
+              <label class="check"><input type="checkbox" id="showDiag"><span>Show timing details under each answer</span></label>
+              <div id="debugPanel" class="debug stack" hidden>
+                <label class="check"><input id="debugToggle" type="checkbox"><span>Audio debug for this session<br><span class="hint">Keeps the last recording in memory so you can listen to exactly what Whisper received.</span></span></label>
+                <pre id="debugStats">Enable audio debug, then record a phrase on the Assistant page.</pre>
+                <div class="grid grid-2"><label class="field">Backend input<audio id="debugInputAudio" controls></audio></label><label class="field">16 kHz Whisper input<audio id="debugWhisperAudio" controls></audio></label></div>
+                <a id="debugDownload" class="small" download="whisper-input.wav" hidden>Download Whisper WAV</a>
+                <label class="field">Expected sentence<input id="expectedText" placeholder="Type what you said"></label>
+                <div class="row"><button class="btn sm" id="compareTranscript" type="button">Compare transcript</button></div>
+                <p class="small"><strong>Raw Whisper:</strong> <span id="rawTranscript">—</span></p>
+                <p class="small muted" id="comparison"></p>
+              </div>
+            </div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<dialog id="dialog" aria-labelledby="dialogTitle"></dialog>
+<script src="/web/app.js" type="module"></script>
+</body>
+</html>

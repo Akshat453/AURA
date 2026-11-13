@@ -1,0 +1,5 @@
+build/
+managed_components/
+sdkconfig.old
+main/secrets.h
+main/certs/ca.crt

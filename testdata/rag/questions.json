@@ -1,0 +1,27 @@
+{
+  "documents": ["dbms-syllabus.md", "normalization-notes.txt", "research-paper.pdf", "os-scheduling-slides.pptx", "cn-lab-manual.docx", "lab-notice.md"],
+  "questions": [
+    {"id": "en-unit3", "language": "en", "query": "What does Unit 3 of the DBMS syllabus cover?", "expect": [{"document": "dbms-syllabus.md", "contains": "Unit 3"}]},
+    {"id": "en-code", "language": "en", "query": "Which course has the code CS-301?", "expect": [{"document": "dbms-syllabus.md", "contains": "CS-301"}]},
+    {"id": "en-code-variant", "language": "en", "query": "What is CS301 about?", "expect": [{"document": "dbms-syllabus.md"}]},
+    {"id": "en-notes", "language": "en", "query": "Find the explanation of normalization in my notes", "expect": [{"document": "normalization-notes.txt"}]},
+    {"id": "en-paraphrase", "language": "en", "query": "How do we stop the same fact being repeated in many rows of a table?", "expect": [{"document": "normalization-notes.txt"}]},
+    {"id": "en-paper-result", "language": "en", "query": "How much energy did the proposed scheduler save?", "expect": [{"document": "research-paper.pdf", "page": 3}]},
+    {"id": "en-paper-method", "language": "en", "query": "What method does the research paper propose for scheduling sensor nodes?", "expect": [{"document": "research-paper.pdf", "page": 2}]},
+    {"id": "en-paper-summary", "language": "en", "query": "Summarize the uploaded research paper", "expect": [{"document": "research-paper.pdf", "page": 1}]},
+    {"id": "en-quantum", "language": "en", "query": "What time quantum is used for round robin in the lecture slides?", "expect": [{"document": "os-scheduling-slides.pptx", "page": 3}]},
+    {"id": "en-deadlock", "language": "en", "query": "What are the necessary conditions for deadlock?", "expect": [{"document": "os-scheduling-slides.pptx", "page": 4}]},
+    {"id": "en-tcp", "language": "en", "query": "Which lab experiment covers the TCP three-way handshake?", "expect": [{"document": "cn-lab-manual.docx", "contains": "handshake"}]},
+    {"id": "en-attendance", "language": "en", "query": "What is the minimum attendance requirement for the database course?", "expect": [{"document": "dbms-syllabus.md", "contains": "attendance"}]},
+    {"id": "hi-unit3", "language": "hi", "query": "डीबीएमएस सिलेबस की यूनिट 3 में क्या पढ़ाया जाता है?", "expect": [{"document": "dbms-syllabus.md", "contains": "Unit 3"}]},
+    {"id": "hi-notes", "language": "hi", "query": "नॉर्मलाइज़ेशन को आसान भाषा में समझाइए", "expect": [{"document": "normalization-notes.txt"}, {"document": "dbms-syllabus.md", "contains": "Unit 3"}]},
+    {"id": "hi-paper-result", "language": "hi", "query": "शोध पत्र के अनुसार प्रस्तावित शेड्यूलर से कितनी ऊर्जा बची?", "expect": [{"document": "research-paper.pdf", "page": 3}]},
+    {"id": "hi-deadlock", "language": "hi", "query": "डेडलॉक होने की आवश्यक शर्तें क्या हैं?", "expect": [{"document": "os-scheduling-slides.pptx", "page": 4}]},
+    {"id": "hi-tcp", "language": "hi", "query": "टीसीपी थ्री-वे हैंडशेक कौन से प्रयोग में है?", "expect": [{"document": "cn-lab-manual.docx", "contains": "handshake"}]},
+    {"id": "hg-quantum", "language": "hinglish", "query": "Round robin mein time quantum kitna rakha gaya hai?", "expect": [{"document": "os-scheduling-slides.pptx", "page": 3}]},
+    {"id": "hg-attendance", "language": "hinglish", "query": "DBMS course mein attendance kitni zaroori hai?", "expect": [{"document": "dbms-syllabus.md", "contains": "attendance"}]},
+    {"id": "absent-ml", "language": "en", "query": "What does the syllabus of the machine learning course cover?", "absent": true},
+    {"id": "absent-cricket", "language": "en", "query": "Who won the cricket world cup?", "absent": true},
+    {"id": "absent-hi", "language": "hi", "query": "क्रिकेट विश्व कप किसने जीता?", "absent": true}
+  ]
+}

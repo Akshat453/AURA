@@ -1,0 +1,1 @@
+idf_component_register(SRCS "aura_single_usb.c" INCLUDE_DIRS ".")
