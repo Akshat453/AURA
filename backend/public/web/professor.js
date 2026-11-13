@@ -40,16 +40,16 @@ async function dashToday() {
   const box = $('dashToday')
   try {
     const [d, all] = await Promise.all([api(`/api/timetable/day?date=${today()}`), api('/api/timetable')])
+    box.className = ''
     if (!all.classes.length) {
       box.replaceChildren(emptyState('calendar', 'Your timetable is empty', 'Add your weekly classes once — the assistant then answers “what is my next lecture?” from them.',
         button('Add your first class', () => go('#/timetable/new'), {cls: 'btn primary sm', iconName: 'plus'})))
       return
     }
-    box.className = ''
     box.replaceChildren(d.classes.length ? el('ul', {class: 'list today-list'}, ...d.classes.map(classRow))
       : emptyState('calendar', 'No classes today', `Nothing scheduled on ${d.weekday}.${d.free?.length ? ' Your working hours are free.' : ''}`))
     if (d.classes.length && d.free?.length) box.append(el('p', {class: 'small muted', style: 'margin-top:10px', text: `Free: ${d.free.map(g => `${clock12(g.from)}–${clock12(g.to)}`).join(', ')}`}))
-  } catch (e) { box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
+  } catch (e) { box.className = ''; box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
 }
 
 async function dashNext() {
@@ -67,7 +67,7 @@ async function dashNext() {
         el('div', {class: 'small muted', text: [o.course_code, o.section && `Section ${o.section}`, o.room].filter(Boolean).join(' · ')}),
         el('div', {class: 'small', style: 'margin-top:4px;color:var(--accent)', text: r.in_progress ? `Ends at ${clock12(o.end)}` : mins < 120 && mins >= 0 ? `Starts in ${mins} min` : `${clock12(o.start)} – ${clock12(o.end)}`}))))
     if (r.in_progress && r.next) box.append(el('p', {class: 'small muted', style: 'margin-top:12px', text: `Next: ${r.next.subject}, ${dayLabel(r.next.date, today())} at ${clock12(r.next.start)}`}))
-  } catch (e) { box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
+  } catch (e) { box.className = ''; box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
 }
 
 async function dashReminders() {
@@ -83,7 +83,7 @@ async function dashReminders() {
       return
     }
     box.replaceChildren(el('ul', {class: 'list'}, ...list.map(r => reminderItem(r, true))))
-  } catch (e) { box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
+  } catch (e) { box.className = ''; box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
 }
 
 async function dashNotes() {
@@ -94,7 +94,7 @@ async function dashNotes() {
     if (!r.notes.length) { box.replaceChildren(emptyState('note', 'No notes yet', 'Say “save a note…” or write one in Notes.', button('Add note', () => go('#/notes/new'), {cls: 'btn sm', iconName: 'plus'}))); return }
     box.replaceChildren(el('ul', {class: 'list'}, ...r.notes.slice(0, 4).map(n => el('li', {},
       el('div', {class: 'grow'}, el('a', {class: 'title', href: `#/notes/${n.id}`, text: n.title}), el('div', {class: 'meta clamp', text: n.body}), el('div', {class: 'meta', text: timeAgo(n.updated_at)}))))))
-  } catch (e) { box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
+  } catch (e) { box.className = ''; box.replaceChildren(el('p', {class: 'error-text', text: e.message})) }
 }
 
 function overdueBadge(n) {

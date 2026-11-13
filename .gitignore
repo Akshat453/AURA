@@ -4,6 +4,7 @@
 /bin/
 /dist/
 models/
+/models
 runtime/
 *.log
 *.pid
